@@ -170,7 +170,7 @@ plt.figure(figsize=(10, 6))
 sns.countplot(data=df, x='loan_status', order=df['loan_status'].value_counts().index,palette='Set2')
 plt.title('Distribution of Loan Status')
 plt.xlabel('Loan Status')
-plt.ylabel('Count')
+plt.ylabel('Number of Loans')
 plt.tight_layout()
 plt.show()
 ```
@@ -221,8 +221,8 @@ loans_by_month = df['issue_month'].value_counts().sort_index()
 
 plt.figure(figsize=(12, 6))
 loans_by_month.plot(kind='bar', color=sns.color_palette('Set3'))
-plt.title('Loan Issuance by Issue Date')
-plt.xlabel('Year')
+plt.title('Monthly Loan Issuance')
+plt.xlabel('Month')
 plt.ylabel('Number of Loans')
 plt.show()
 ```
@@ -233,9 +233,9 @@ This histogram shows the distribution of loan amounts, while the KDE curve spots
 ```python
 plt.figure(figsize=(12, 6))
 sns.histplot(data=df, x='loan_amount', bins=30, kde=True,color='skyblue')
-plt.title('Distribution of Loan Amounts')
+plt.title('Distribution of Loan Sizes')
 plt.xlabel('Loan Amount ($)')
-plt.ylabel('Count')
+plt.ylabel('Frequency')
 plt.show()
 ```
 - Most loans are between $3,000 and $12,000, peaking around $5,000, while fewer high-value loans above $20,000, indicating limited demand or stricter approval.
@@ -245,7 +245,7 @@ plt.show()
 ```python
 plt.figure(figsize=(12, 6))
 sns.boxplot(data=df, x='grade', y='int_rate', order=['A', 'B', 'C', 'D', 'E', 'F', 'G'],palette='coolwarm')
-plt.title('Interest Rate Distribution by Loan Grade')
+plt.title('Loan Grade vs. Interest Rate')
 plt.xlabel('Loan Grade')
 plt.ylabel('Interest Rate')
 plt.show()
@@ -259,7 +259,7 @@ plt.figure(figsize=(12, 6))
 df['purpose_category'].value_counts().plot(kind='bar',color=sns.color_palette('Set2'))
 plt.title('Loan Purpose Distribution')
 plt.xlabel('Purpose Category')
-plt.ylabel('Count')
+plt.ylabel('Number of Loans')
 plt.xticks(rotation=45)
 plt.show()
 ```
@@ -274,16 +274,11 @@ loan_counts = df['address_state'].value_counts().reset_index()
 loan_counts.columns = ['state', 'loan_count']
 
 # Create a choropleth map
-fig = px.choropleth(
-    loan_counts,
-    locations='state',        # State abbreviations
-    locationmode='USA-states',
-    color='loan_count',
-    color_continuous_scale='Blues',
-    scope='usa',
-    labels={'loan_count': 'Number of Loans'},
-    title='Loan Distribution by State'
-)
+fig = px.choropleth(loan_counts,locations='state',
+locationmode='USA-states',color='loan_count',
+color_continuous_scale='Blues',scope='usa',
+labels={'loan_count': 'Number of Loans'},
+title='Loan Distribution by State')
 
 fig.show()
 ```
@@ -298,7 +293,7 @@ plt.figure(figsize=(12, 6))
 sns.histplot(data=df, x='annual_income', bins=30, kde=True)
 plt.title('Distribution of Annual Income')
 plt.xlabel('Annual Income ($)')
-plt.ylabel('Count')
+plt.ylabel('Number of Borrowers')
 plt.xlim(0, 200000)  # Remove extreme outliers for better visualization
 plt.show()
 ```
@@ -311,7 +306,7 @@ plt.figure(figsize=(10, 6))
 df['home_ownership'].value_counts().plot(kind='bar',color=sns.color_palette('Set2'))
 plt.title('Home Ownership Distribution')
 plt.xlabel('Home Ownership Status')
-plt.ylabel('Count')
+plt.ylabel('Number of Borrowers')
 plt.show()
 ```
 - Most people either rent or are still paying off a mortgage—very few actually own their home outright. That means most borrowers likely have ongoing monthly housing costs.
@@ -323,7 +318,7 @@ plt.figure(figsize=(12, 6))
 df['emp_length'].value_counts().plot(kind='bar',color=sns.color_palette('Set3'))
 plt.title('Employment Length Distribution')
 plt.xlabel('Employment Length')
-plt.ylabel('Count')
+plt.ylabel('Number of Borrowers')
 plt.show()
 ```
 - A big chunk of people in the dataset have been at their job for 10+ years—that’s a strong sign of stability. On the flip side, there's also a noticeable group with only 1 year of employment, which could signal newer workers or recent job changes.
