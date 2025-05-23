@@ -27,6 +27,7 @@ After signing, the lender disburses the funds. The borrower begins repayment as 
 - Source: [Bank Loan Dateset]()
 
 # I. Data Cleaning:
+- In our journey to understand the dynamics behind financial loan data, we begin by equipping ourselves with essential tools as well as setting a clean aesthetic to ensure our visualizations are both appealing and readable.
 ```python
 import numpy as np
 import pandas as pd
@@ -38,6 +39,7 @@ from datetime import datetime
 sns.set_style('whitegrid')
 plt.rcParams['figure.figsize'] = (12, 6)
 ```
+## 1. Loading dataset:
 ```python
 df = pd.read_csv('/content/financial_loan.csv')
 df.head(2)
@@ -45,17 +47,21 @@ df.head(2)
 ```python
 df.info()
 ```
+## 2. Checking null values:
 ```python
 df.isnull().sum()
 ```
+- We uncover where information is missing. One such silence lies in the emp_title column.
 ```python
 # Handle missing values in emp_title (employment title)
 df['emp_title'].fillna('Not Provided', inplace=True)
 ```
+## 3. Checking duplicated values:
 ```python
 df.duplicated().sum()
 ```
-First let's check the 'object' columns. We see that there are some columns that can be transformed to date or numeric columns.
+## 4. Transform data:
+- First let's check the 'object' columns. We see that there are some columns that can be transformed to date or numeric columns.
 ```python
 # Remove leading/trailing whitespaces from objects
 df = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
@@ -93,7 +99,7 @@ def get_sorted_unique_counts(df):
 
 get_sorted_unique_counts(df)
 ```
-Check how many unique values are in object columns. We check if binning is needed. Check all for any inconsistences or imbalances
+- Check how many unique values are in object columns. We check if binning is needed. Check all for any inconsistences or imbalances
 ```python
 def value_counter(df):
     value_series = pd.DataFrame()
@@ -112,17 +118,17 @@ value_counter(df)
 # Create a new column for loan purpose category (simplifying the purpose)
 purpose_mapping = {
     'car': 'vehicle',
-    'debt_consolidation': 'debt_consolidation',
-    'credit_card': 'credit_card',
-    'home_improvement': 'home_improvement',
+    'Debt consolidation': 'debt consolidation',
+    'credit card': 'credit card',
+    'home improvement': 'home improvement',
     'other': 'other',
-    'major_purchase': 'major_purchase',
+    'major purchase': 'major purchase',
     'medical': 'medical',
-    'small_business': 'business',
+    'small business': 'business',
     'vacation': 'personal',
     'moving': 'personal',
     'house': 'housing',
-    'renewable_energy': 'home_improvement',
+    'renewable energy': 'home improvement',
     'wedding': 'personal'
 }
 df['purpose_category'] = df['purpose'].map(lambda x: purpose_mapping.get(x, 'other'))
@@ -133,13 +139,13 @@ display(df.head())
 ```
 # II. EDA:
 ## 1. Overview:
-Numerical columns statistics
+### **Numerical columns statistics**
 ```python
 num_cols = ['annual_income', 'dti', 'installment', 'int_rate', 'loan_amount', 'total_acc', 'total_payment']
 print("Numerical Columns Statistics:")
 display(df[num_cols].describe())
 ```
-Categorical columns statistics
+### **Categorical columns statistics**
 ```python
 cat_cols = ['application_type', 'grade', 'home_ownership', 'purpose', 'sub_grade', 'term', 'verification_status', 'loan_status']
 print("\nCategorical Columns Value Counts:")
@@ -147,7 +153,7 @@ for col in cat_cols:
     print(f"\n{col}:")
     display(df[col].value_counts(normalize=True).head(10))
 ```
-### 📝 Mini conclusion
+#### 📝 Mini conclusion
 - The average loan amount is around $11,296 with a wide range from $500 to $35000,000
 - Interest rates vary from 5.4% to 24.6%
 - Most loans (73%) are for 36 months term
@@ -156,8 +162,8 @@ for col in cat_cols:
 - Most applicants (48%) are renting their homes
 
 ## 2. Loan Status Analysis
-- Loan status distribution
-Our first goal is to understand how loans typically end. The chart below shows the number of loans for each status, such as "Fully
+### **Loan status distribution**
+Our goal is to understand how loans typically end. The chart below shows the number of loans for each status, such as "Fully
 Paid", "Charged Off", etc.
 ```python
 plt.figure(figsize=(10, 6))
@@ -168,9 +174,9 @@ plt.ylabel('Count')
 plt.tight_layout()
 plt.show()
 ```
-The majority of loans in the dataset are fully paid, indicating strong repayment behavior among borrowers. However, a significant portion has been charged off, reflecting a measurable level of credit risk.
+- The majority of loans in the dataset are fully paid, indicating strong repayment behavior among borrowers. However, a significant portion has been charged off, reflecting a measurable level of credit risk.
 
-- Loan status by loan amount
+### **Loan status by loan amount**
 Next, let's explore whether larger loan amounts are more likely to default. The boxplot below shows the distribution of loan amounts for each loan status.
 ```python
 plt.figure(figsize=(12, 6))
@@ -186,20 +192,156 @@ plt.show()
 - Defaults are not limited to high loan amounts—many charged-off loans are relatively small, pointing to other contributing risk factors beyond just loan size.
 - There are notable outliers across all categories, especially for Fully Paid and Charged Off loans. These outliers could represent special cases like debt consolidation or high-risk lending—worth flagging for deeper investigation.
 
-## 3. Loan Characteristics Analysis
-
-- Default rate by grade
-One of the most critical risk indicators is the "grade" — the credit rating assigned to the loan. The following chart shows the default rate (i.e., Charged Off) for each grade from A (lowest risk) to G (highest risk).
+### **Default rate by grade**
+📌 The **default rate** is the percentage of loans (or borrowers) that fail to meet their repayment obligations on time according to the agreed terms. 
 ```python
 default_rate = df.groupby('grade')['loan_status'].apply(lambda x: (x == 'Charged Off').mean()).reset_index()
+default_rate.rename(columns={'loan_status': 'default_rate'}, inplace=True)
+
 plt.figure(figsize=(12, 6))
-sns.barplot(data=default_rate, x='grade', y='loan_status',palette='coolwarm')
+sns.barplot(data=default_rate,x='grade',y='default_rate', palette='coolwarm')
 plt.title('Default Rate by Loan Grade')
 plt.xlabel('Loan Grade')
 plt.ylabel('Default Rate')
-plt.ylim(0, 1)
+plt.ylim(0, 1) 
 plt.tight_layout()
 plt.show()
 ```
+- Defaulted loans tend to have slightly higher loan amounts
+- Lower grade loans (E, F, G) have significantly higher default rates (30-35%) compared to higher grades (A, B). This suggests the grading system is effective at identifying riskier loans.
+
+## 3. Loan Characteristics Analysis
+### **Loan issuance over time**
+```python
+# Extract year-month for monthly analysis
+df['issue_month'] = df['issue_date'].dt.to_period('M').astype(str)
+
+# Loan issuance over time (by month)
+loans_by_month = df['issue_month'].value_counts().sort_index()
+
+plt.figure(figsize=(12, 6))
+loans_by_month.plot(kind='bar', color=sns.color_palette('Set3'))
+plt.title('Loan Issuance by Issue Date')
+plt.xlabel('Year')
+plt.ylabel('Number of Loans')
+plt.show()
+```
+- In 2021, loan issuance steadily grew month after month. This steady rise likely reflects a recovering economy and growing consumer confidence after the pandemic's early impact. All in all, no clear seasonal pattern was seen.
+
+### **Loan amount distribution**
+This histogram shows the distribution of loan amounts, while the KDE curve spots any unusual spikes that might hint at specific lending trends or constraints.
+```python
+plt.figure(figsize=(12, 6))
+sns.histplot(data=df, x='loan_amount', bins=30, kde=True,color='skyblue')
+plt.title('Distribution of Loan Amounts')
+plt.xlabel('Loan Amount ($)')
+plt.ylabel('Count')
+plt.show()
+```
+- Most loans are between $3,000 and $12,000, peaking around $5,000, while fewer high-value loans above $20,000, indicating limited demand or stricter approval.
+- The curve (KDE) shows a right-skewed distribution—most people borrow smaller amounts, while only a few take on larger debts. This suggests that risk appetite or creditworthiness may limit access to higher loan amounts.
+
+### **Interest rate by Loan grade**
+```python
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=df, x='grade', y='int_rate', order=['A', 'B', 'C', 'D', 'E', 'F', 'G'],palette='coolwarm')
+plt.title('Interest Rate Distribution by Loan Grade')
+plt.xlabel('Loan Grade')
+plt.ylabel('Interest Rate')
+plt.show()
+```
+- This boxplot reveals how lenders adjust interest to offset risk: loan grade worsens from A to G, interest rates increase.
+- Grade A loans have the lowest and tightest spread of rates, while grade G loans have the highest median interest rates and greater variability. Futhermore, grades C to E show more outliers and wider IQRs, indicating greater diversity in borrower profiles within these grades.
+
+### **Loan purpose distribution**
+```python
+plt.figure(figsize=(12, 6))
+df['purpose_category'].value_counts().plot(kind='bar',color=sns.color_palette('Set2'))
+plt.title('Loan Purpose Distribution')
+plt.xlabel('Purpose Category')
+plt.ylabel('Count')
+plt.xticks(rotation=45)
+plt.show()
+```
+- Debt consolidation is the most common loan purpose by far. Credit card loans are the second most frequent, both indicating debt management focus.
+- Categories like home improvement, major purchase, and personal loans are common but far less frequent. Indicates moderate use of loans for discretionary or planned expenses.
+
+### Loan distribution by state
+
+```python
+# Count loans by state
+loan_counts = df['address_state'].value_counts().reset_index()
+loan_counts.columns = ['state', 'loan_count']
+
+# Create a choropleth map
+fig = px.choropleth(
+    loan_counts,
+    locations='state',        # State abbreviations
+    locationmode='USA-states',
+    color='loan_count',
+    color_continuous_scale='Blues',
+    scope='usa',
+    labels={'loan_count': 'Number of Loans'},
+    title='Loan Distribution by State'
+)
+
+fig.show()
+```
+- California has the highest number of loans, followed by Florida and Texas - which also have a relatively high number of loans. Most other states don't have nearly as many. It seems like more loans happen in more populated states.
+
+## 4. Borrower Characteristics Analysis
+### **Annual income distribution**
+Let’s start by examining borrowers’ earning power. We'll exclude extreme outliers above $200,000 to focus on the bulk of the population.
+```python
+# Annual income distribution
+plt.figure(figsize=(12, 6))
+sns.histplot(data=df, x='annual_income', bins=30, kde=True)
+plt.title('Distribution of Annual Income')
+plt.xlabel('Annual Income ($)')
+plt.ylabel('Count')
+plt.xlim(0, 200000)  # Remove extreme outliers for better visualization
+plt.show()
+```
+- Most borrowers earn between $30,000 and $75,000 annually, suggesting the loan platform caters primarily to middle-income individuals.
+- A significant drop-off in counts occurs after $75,000, indicating income distribution is right-skewed.
+
+### **Home ownership distribution**
+```python
+plt.figure(figsize=(10, 6))
+df['home_ownership'].value_counts().plot(kind='bar',color=sns.color_palette('Set2'))
+plt.title('Home Ownership Distribution')
+plt.xlabel('Home Ownership Status')
+plt.ylabel('Count')
+plt.show()
+```
+- Most people either rent or are still paying off a mortgage—very few actually own their home outright. That means most borrowers likely have ongoing monthly housing costs.
+- There are barely any in the “other” or “none” categories, so we’re mostly looking at pretty typical housing situations.
+
+### **Employment length distribution**
+```python
+plt.figure(figsize=(12, 6))
+df['emp_length'].value_counts().plot(kind='bar',color=sns.color_palette('Set3'))
+plt.title('Employment Length Distribution')
+plt.xlabel('Employment Length')
+plt.ylabel('Count')
+plt.show()
+```
+- A big chunk of people in the dataset have been at their job for 10+ years—that’s a strong sign of stability. On the flip side, there's also a noticeable group with only 1 year of employment, which could signal newer workers or recent job changes.
+- As the number of years increases from 2 to 9, the counts gradually taper off. It’s a mix, but overall, we see a healthy portion with long-term employment, which is a positive indicator for creditworthiness.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
