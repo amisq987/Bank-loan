@@ -42,15 +42,27 @@ plt.rcParams['figure.figsize'] = (12, 6)
 ## 1. Loading dataset:
 ```python
 df = pd.read_csv('/content/financial_loan.csv')
-df.head(2)
+df.head(5)
 ```
+<center>
+      <img src="png/df.head5.png"/>
+  </center>
+
 ```python
 df.info()
 ```
+<center>
+      <img src="png/df.info.png"/>
+  </center>
+  
 ## 2. Checking null values:
 ```python
 df.isnull().sum()
 ```
+<center>
+      <img src="png/df.isnull.png"/>
+  </center>
+  
 - We uncover where information is missing. One such silence lies in the emp_title column.
 ```python
 # Handle missing values in emp_title (employment title)
@@ -60,6 +72,10 @@ df['emp_title'].fillna('Not Provided', inplace=True)
 ```python
 df.duplicated().sum()
 ```
+<center>
+      <img src="png/df.duplicated.png"/>
+  </center>
+  
 ## 4. Transform data:
 - First let's check the 'object' columns. We see that there are some columns that can be transformed to date or numeric columns.
 ```python
@@ -99,6 +115,10 @@ def get_sorted_unique_counts(df):
 
 get_sorted_unique_counts(df)
 ```
+<center>
+      <img src="png/object.nuinique.png"/>
+  </center>
+  
 - Check how many unique values are in object columns. We check if binning is needed. Check all for any inconsistences or imbalances
 ```python
 def value_counter(df):
@@ -108,6 +128,18 @@ def value_counter(df):
 
 value_counter(df)
 ```
+<center>
+      <img src="png/binning1.png"/>
+  </center>
+
+<center>
+      <img src="png/binning2.png"/>
+  </center>
+
+<center>
+      <img src="png/binning3.png"/>
+  </center>
+
 ### 📝 Key observations
 - sub_grade : is already groupped by grade
 - home_ownership : The majority categories (mortgage and rent) dominate the data, while own and especially other are underrepresented. Such an imbalance can lead to biased models, where predictions are skewed toward the majority classes.
@@ -137,6 +169,10 @@ df['purpose_category'] = df['purpose'].map(lambda x: purpose_mapping.get(x, 'oth
 print("\nData after cleaning:")
 display(df.head())
 ```
+<center>
+      <img src="png/df.cleaned.png"/>
+  </center>
+
 # II. EDA:
 ## 1. Overview:
 ### **Numerical columns statistics**
@@ -145,6 +181,10 @@ num_cols = ['annual_income', 'dti', 'installment', 'int_rate', 'loan_amount', 't
 print("Numerical Columns Statistics:")
 display(df[num_cols].describe())
 ```
+<center>
+      <img src="png/num.describe.png"/>
+  </center>
+
 ### **Categorical columns statistics**
 ```python
 cat_cols = ['application_type', 'grade', 'home_ownership', 'purpose', 'sub_grade', 'term', 'verification_status', 'loan_status']
@@ -153,6 +193,18 @@ for col in cat_cols:
     print(f"\n{col}:")
     display(df[col].value_counts(normalize=True).head(10))
 ```
+<center>
+      <img src="png/cate.describe1.png"/>
+  </center>
+
+<center>
+      <img src="png/cate.describe2.png"/>
+  </center>
+
+<center>
+      <img src="png/cate.describe3.png"/>
+  </center>
+  
 #### 📝 Mini conclusion
 - The average loan amount is around $11,296 with a wide range from $500 to $35000,000
 - Interest rates vary from 5.4% to 24.6%
@@ -174,6 +226,10 @@ plt.ylabel('Number of Loans')
 plt.tight_layout()
 plt.show()
 ```
+<center>
+      <img src="png/loanstatus.dis.png"/>
+  </center>
+  
 - The majority of loans in the dataset are fully paid, indicating strong repayment behavior among borrowers. However, a significant portion has been charged off, reflecting a measurable level of credit risk.
 
 ### **Loan status by loan amount**
@@ -187,6 +243,10 @@ plt.ylabel('Loan Amount ($)')
 plt.tight_layout()
 plt.show()
 ```
+<center>
+      <img src="png/status.vs.amount.png"/>
+  </center>
+  
 - Current loans have the highest median and widest range of loan amounts, indicating that larger loans tend to remain active longer.
 - Charged-off and fully paid loans have similar, lower medians, suggesting that smaller loans are more likely to reach a resolution.
 - Defaults are not limited to high loan amounts—many charged-off loans are relatively small, pointing to other contributing risk factors beyond just loan size.
@@ -207,6 +267,10 @@ plt.ylim(0, 1)
 plt.tight_layout()
 plt.show()
 ```
+<center>
+      <img src="png/defaultrate.grade.png"/>
+  </center>
+
 - Defaulted loans tend to have slightly higher loan amounts
 - Lower grade loans (E, F, G) have significantly higher default rates (30-35%) compared to higher grades (A, B). This suggests the grading system is effective at identifying riskier loans.
 
@@ -226,6 +290,10 @@ plt.xlabel('Month')
 plt.ylabel('Number of Loans')
 plt.show()
 ```
+<center>
+      <img src="png/monthly.png"/>
+  </center>
+
 - In 2021, loan issuance steadily grew month after month. This steady rise likely reflects a recovering economy and growing consumer confidence after the pandemic's early impact. All in all, no clear seasonal pattern was seen.
 
 ### **Loan amount distribution**
@@ -238,6 +306,10 @@ plt.xlabel('Loan Amount ($)')
 plt.ylabel('Frequency')
 plt.show()
 ```
+<center>
+      <img src="png/size.dis.png"/>
+  </center>
+  
 - Most loans are between $3,000 and $12,000, peaking around $5,000, while fewer high-value loans above $20,000, indicating limited demand or stricter approval.
 - The curve (KDE) shows a right-skewed distribution—most people borrow smaller amounts, while only a few take on larger debts. This suggests that risk appetite or creditworthiness may limit access to higher loan amounts.
 
@@ -250,6 +322,10 @@ plt.xlabel('Loan Grade')
 plt.ylabel('Interest Rate')
 plt.show()
 ```
+<center>
+      <img src="png/grade.vs.int.png"/>
+  </center>
+  
 - This boxplot reveals how lenders adjust interest to offset risk: loan grade worsens from A to G, interest rates increase.
 - Grade A loans have the lowest and tightest spread of rates, while grade G loans have the highest median interest rates and greater variability. Futhermore, grades C to E show more outliers and wider IQRs, indicating greater diversity in borrower profiles within these grades.
 
@@ -263,6 +339,10 @@ plt.ylabel('Number of Loans')
 plt.xticks(rotation=45)
 plt.show()
 ```
+<center>
+      <img src="png/purpose.dis.png"/>
+  </center>
+
 - Debt consolidation is the most common loan purpose by far. Credit card loans are the second most frequent, both indicating debt management focus.
 - Categories like home improvement, major purchase, and personal loans are common but far less frequent. Indicates moderate use of loans for discretionary or planned expenses.
 
@@ -282,6 +362,10 @@ title='Loan Distribution by State')
 
 fig.show()
 ```
+<center>
+      <img src="png/state.distribution.png"/>
+  </center>
+  
 - California has the highest number of loans, followed by Florida and Texas - which also have a relatively high number of loans. Most other states don't have nearly as many. It seems like more loans happen in more populated states.
 
 ## 4. Borrower Characteristics Analysis
@@ -297,6 +381,10 @@ plt.ylabel('Number of Borrowers')
 plt.xlim(0, 200000)  # Remove extreme outliers for better visualization
 plt.show()
 ```
+<center>
+      <img src="png/income.dis.png"/>
+  </center>
+  
 - Most borrowers earn between $30,000 and $75,000 annually, suggesting the loan platform caters primarily to middle-income individuals.
 - A significant drop-off in counts occurs after $75,000, indicating income distribution is right-skewed.
 
@@ -309,6 +397,10 @@ plt.xlabel('Home Ownership Status')
 plt.ylabel('Number of Borrowers')
 plt.show()
 ```
+<center>
+      <img src="png/home.dis.png"/>
+  </center>
+  
 - Most people either rent or are still paying off a mortgage—very few actually own their home outright. That means most borrowers likely have ongoing monthly housing costs.
 - There are barely any in the “other” or “none” categories, so we’re mostly looking at pretty typical housing situations.
 
@@ -321,6 +413,10 @@ plt.xlabel('Employment Length')
 plt.ylabel('Number of Borrowers')
 plt.show()
 ```
+<center>
+      <img src="png/emplength.dis.png"/>
+  </center>
+  
 - A big chunk of people in the dataset have been at their job for 10+ years—that’s a strong sign of stability. On the flip side, there's also a noticeable group with only 1 year of employment, which could signal newer workers or recent job changes.
 - As the number of years increases from 2 to 9, the counts gradually taper off. It’s a mix, but overall, we see a healthy portion with long-term employment, which is a positive indicator for creditworthiness.
 
