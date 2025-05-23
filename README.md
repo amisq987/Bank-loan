@@ -24,7 +24,7 @@ After signing, the lender disburses the funds. The borrower begins repayment as 
 - SQL using MySQL Workbench: Double check the KPIs in the dashboards.
 - Tableu: Visualisations.
 ## 📂 Dataset
-- Source: [Bank Loan Dateset]()
+- Source: [Bank Loan Dataset](financial_loan.csv)
 
 # I. Data Cleaning:
 - In our journey to understand the dynamics behind financial loan data, we begin by equipping ourselves with essential tools as well as setting a clean aesthetic to ensure our visualizations are both appealing and readable.
