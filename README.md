@@ -1,17 +1,17 @@
 # Loan Application and Management
 
 
-1. **[📌 Project objective](#📌-project-objective)**
-2. **[🔍 Understanding the business process](#🔍-understanding-the-business-process)**
-3. **[🛠 Technologies used](#🛠-technologies-used)**
-4. **[📂 Dataset](#📂-dataset)**
+1. **[Project objective](#project-objective)**
+2. **[Understanding the business process](#understanding-the-business-process)**
+3. **[Technologies used](#technologies-used)**
+4. **[Dataset](#dataset)**
 5. **[Data Cleaning](#data-cleaning)**
 6. **[EDA](#eda)**
 7. **[Dashboards](#dashboards)**
 
-# 📌 Project objective
+# Project objective
 In order to monitor and assess our bank's lending activities and performance, we need to create a comprehensive Loan Application and Management Report. This report aims to provide insights into key loan-related metrics and their changes over time. The report will help us make data-driven decisions, track our loan portfolio's health, and identify trends that can inform our lending strategies.
-# 🔍 Understanding the business process
+# Understanding the business process
 When the company receives a loan application, the company has to make a decision for loan approval based on the applicant’s profile. Here’s an overview of the business process:
 1. **Loan Application Submission**
 The customer submits a loan application through online, in-person, or alternative channels.
@@ -28,11 +28,11 @@ The lender reviews the application, verifies the applicant’s identity, and col
 Based on the evaluation, the loan is either approved or denied. If approved, the lender sets the terms (amount, interest rate, tenure) and provides a loan agreement for the borrower to review and sign.
 5. **Disbursement & Loan Management**
 After signing, the lender disburses the funds. The borrower begins repayment as per the agreed schedule. The lender monitors repayment behavior, manages delinquencies if any, and assesses the loan’s ongoing performance.
-# 🛠 Technologies used
+# Technologies used
 - Python (Pandas, NumPy, Matplotlib, Seaborn) using Google Colab: Data cleaning (ensure the integrity of dataset) and EDA.
 - SQL using MySQL Workbench: Double check the KPIs in the dashboards.
 - Tableu: Visualisations.
-# 📂 Dataset
+# Dataset
 - Source: [Bank Loan Dataset](financial_loan.csv)
 
 # Data Cleaning
