@@ -1,8 +1,17 @@
 # Loan Application and Management
 
-## 📌 Project objective
+
+1. **[📌 Project objective](#📌-project-objective)**
+2. **[🔍 Understanding the business process](#🔍-understanding-the-business-process)**
+3. **[🛠 Technologies used](#🛠-technologies-used)**
+4. **[📂 Dataset](#📂-dataset)**
+5. **[Data Cleaning](#data-cleaning)**
+6. **[EDA](#eda)**
+7. **[Dashboards](#dashboards)**
+
+# 📌 Project objective
 In order to monitor and assess our bank's lending activities and performance, we need to create a comprehensive Loan Application and Management Report. This report aims to provide insights into key loan-related metrics and their changes over time. The report will help us make data-driven decisions, track our loan portfolio's health, and identify trends that can inform our lending strategies.
-## 🔍 Understanding the business process
+# 🔍 Understanding the business process
 When the company receives a loan application, the company has to make a decision for loan approval based on the applicant’s profile. Here’s an overview of the business process:
 1. **Loan Application Submission**
 The customer submits a loan application through online, in-person, or alternative channels.
@@ -19,14 +28,14 @@ The lender reviews the application, verifies the applicant’s identity, and col
 Based on the evaluation, the loan is either approved or denied. If approved, the lender sets the terms (amount, interest rate, tenure) and provides a loan agreement for the borrower to review and sign.
 5. **Disbursement & Loan Management**
 After signing, the lender disburses the funds. The borrower begins repayment as per the agreed schedule. The lender monitors repayment behavior, manages delinquencies if any, and assesses the loan’s ongoing performance.
-## 🛠 Technologies used
+# 🛠 Technologies used
 - Python (Pandas, NumPy, Matplotlib, Seaborn) using Google Colab: Data cleaning (ensure the integrity of dataset) and EDA.
 - SQL using MySQL Workbench: Double check the KPIs in the dashboards.
 - Tableu: Visualisations.
-## 📂 Dataset
+# 📂 Dataset
 - Source: [Bank Loan Dataset](financial_loan.csv)
 
-# I. Data Cleaning:
+# Data Cleaning
 - In our journey to understand the dynamics behind financial loan data, we begin by equipping ourselves with essential tools as well as setting a clean aesthetic to ensure our visualizations are both appealing and readable.
 ```python
 import numpy as np
@@ -173,7 +182,7 @@ display(df.head())
       <img src="png/df.cleaned.png"/>
   </center>
 
-# II. EDA:
+# EDA
 ## 1. Overview:
 ### **Numerical columns statistics**
 ```python
@@ -420,7 +429,7 @@ plt.show()
 - A big chunk of people in the dataset have been at their job for 10+ years—that’s a strong sign of stability. On the flip side, there's also a noticeable group with only 1 year of employment, which could signal newer workers or recent job changes.
 - As the number of years increases from 2 to 9, the counts gradually taper off. It’s a mix, but overall, we see a healthy portion with long-term employment, which is a positive indicator for creditworthiness.
 
-# DASHBOARDS
+# Dashboards
 
 [Link to DASHBOARDS](https://public.tableau.com/shared/549H7PNY4?:display_count=n&:origin=viz_share_link)
 
